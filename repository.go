@@ -44,8 +44,8 @@ func InitRepository(path string, bare bool) (*Repository, error) {
 	return r, nil
 }
 
-// Frees memory associated with the Repository. The repository should be
-// considered invalid after this operation.
+// Frees memory associated with the repository. The repository handle should
+// be considered invalid after this operation.
 func (r Repository) Free() {
 	C.git_repository_free(r.repo)
 }
