@@ -50,7 +50,7 @@ func (o Object) Oid() Oid {
 }
 
 func (o Object) Type() ObjectType {
-	return GIT_OBJ_ANY
+	return _GIT_OBJ_ANY
 }
 
 type Commit struct {
