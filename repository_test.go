@@ -7,12 +7,6 @@ import (
 	"testing"
 )
 
-func rm(path string) {
-	if err := os.RemoveAll(path); err != nil {
-		fmt.Println("error in rm:", err)
-	}
-}
-
 func mktmpDir() string {
 	r, err := ioutil.TempDir("/tmp", "goit")
 	if err != nil {
@@ -31,7 +25,7 @@ func TestOpenRepository(t *testing.T) {
 
 func TestInitRepository(t *testing.T) {
 	tmpDir := mktmpDir()
-	defer rm(tmpDir)
+	defer os.RemoveAll(tmpDir)
 
 	r, err := InitRepository(tmpDir, false)
 	if err != nil {
@@ -50,7 +44,7 @@ func TestInitRepository(t *testing.T) {
 
 func TestInitRepositoryBare(t *testing.T) {
 	tmpDir := mktmpDir()
-	defer rm(tmpDir)
+	defer os.RemoveAll(tmpDir)
 	r, err := InitRepository(tmpDir, true)
 	if err != nil {
 		t.Error(err)
