@@ -62,14 +62,14 @@ func TestInitRepositoryBare(t *testing.T) {
 
 func TestExistingRepo(t *testing.T) {
 	path := "/usr/local/src/git"
-	r, err := OpenRepository(path)
+	repo, err := OpenRepository(path)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	fmt.Println(r)
-	fmt.Println(r.Workdir())
-	h, _, e := r.Head()
+	fmt.Println(repo)
+	fmt.Println(repo.Workdir())
+	h, _, e := repo.Head()
 	if e != nil {
 		t.Fatal(e)
 	}
