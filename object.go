@@ -40,8 +40,6 @@ func (o Oid) String() string {
 	return C.GoString(ptr)
 }
 
-type ObjectType int
-
 type Object struct {
 	obj *C.struct_git_object
 }
@@ -52,8 +50,8 @@ func (o Object) Oid() Oid {
 	return oid
 }
 
-func (o Object) Type() ObjectType {
-	return _GIT_OBJ_ANY
+func (o Object) Type() string {
+	return C.GoString(C.git_object_type2string(C.git_object_type(o.obj)))
 }
 
 func (o Object) String() string {
