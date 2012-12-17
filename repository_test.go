@@ -76,6 +76,17 @@ func TestExistingRepo(t *testing.T) {
 	fmt.Println("head", h)
 	fmt.Println("target", h.Target())
 	fmt.Println("oid", h.Oid())
-	//s,e := r.LookupCommit(h.Oid())
-	//fmt.Println("commit", s, e)
+
+	oid := h.Oid().String()
+	o1, err := repo.LookupObject(oid)
+	if err != nil {
+		t.Fatal(err)
+	}
+	o2, err := repo.LookupObject(oid[:7])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if o1.String() != o2.String() {
+		fmt.Errorf("Looked up objects don't match: '%s' vs '%s'", o1.String(), o2.String())
+	}
 }

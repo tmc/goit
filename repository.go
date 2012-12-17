@@ -91,3 +91,15 @@ func (r Repository) Workdir() string {
 func (r Repository) String() string {
 	return fmt.Sprintf("<goit.Repository %s>", r.Path())
 }
+
+func (r Repository) LookupObject(id string) (*Object, error) {
+	o := new(Object)
+	oid, err := NewOidFromString(id)
+	if err != nil {
+		return nil, err
+	}
+	if err := gitError(C.git_object_lookup_prefix(&o.obj, r.repo, oid.oid, C.uint(len(id)), _GIT_OBJ_ANY)); err != nil {
+		return nil, err
+	}
+	return o, nil
+}

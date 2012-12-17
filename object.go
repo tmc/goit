@@ -20,7 +20,11 @@ func NewOidFromString(from string) (*Oid, error) {
 	cfrom := C.CString(from)
 	defer C.free(unsafe.Pointer(cfrom))
 
-	err := gitError(C.git_oid_fromstr(oid.oid, cfrom))
+	n := len(from)
+	if n > _GIT_OID_HEXSZ {
+		n = _GIT_OID_HEXSZ
+	}
+	err := gitError(C.git_oid_fromstrn(oid.oid, cfrom, C.size_t(n)))
 	if err != nil {
 		return nil, err
 	}
@@ -28,6 +32,9 @@ func NewOidFromString(from string) (*Oid, error) {
 }
 
 func (o Oid) String() string {
+	if o.oid == nil {
+		return "(invalid)"
+	}
 	ptr := C.git_oid_allocfmt(o.oid)
 	defer C.free(unsafe.Pointer(ptr))
 	return C.GoString(ptr)
@@ -35,22 +42,22 @@ func (o Oid) String() string {
 
 type ObjectType int
 
-type GitObject interface {
-	Oid() Oid
-	Type() ObjectType
-}
-
 type Object struct {
 	obj *C.struct_git_object
-	oid Oid
 }
 
 func (o Object) Oid() Oid {
-	return o.oid
+	oid := Oid{}
+	oid.oid = C.git_object_id(o.obj)
+	return oid
 }
 
 func (o Object) Type() ObjectType {
 	return _GIT_OBJ_ANY
+}
+
+func (o Object) String() string {
+	return o.Oid().String()
 }
 
 type Commit struct {
