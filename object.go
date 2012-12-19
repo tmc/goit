@@ -58,6 +58,4 @@ func (o Object) String() string {
 	return o.Oid().String()
 }
 
-type Commit struct {
-	Object
 }
