@@ -70,16 +70,13 @@ func TestExistingRepo(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	fmt.Println(repo)
-	fmt.Println(repo.Workdir())
+	if cleanupPath(repo.Workdir()) != cleanupPath(path) {
+		t.Error(cleanupPath(repo.Workdir()), "!=", cleanupPath(path))
+	}
 	h, _, e := repo.Head()
 	if e != nil {
 		t.Fatal(e)
 	}
-	fmt.Println("head", h)
-	fmt.Println("target", h.Target())
-	fmt.Println("oid", h.Oid())
-
 	oid := h.Oid().String()
 	o1, err := repo.LookupObject(oid)
 	if err != nil {
