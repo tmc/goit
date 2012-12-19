@@ -58,4 +58,8 @@ func (o Object) String() string {
 	return o.Oid().String()
 }
 
+func (o Object) Repository() *Repository {
+	r := new(Repository)
+	r.repo = C.git_object_owner(o.obj)
+	return r
 }
